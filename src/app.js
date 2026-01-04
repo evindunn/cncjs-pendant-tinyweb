@@ -3,6 +3,7 @@ $(function() {
 var root = window;
 var cnc = root.cnc || {};
 var controller = cnc.controller;
+const jogDistanceSelect = $('select[data-name="select-distance"]');
 
 controller.on('serialport:list', function(list) {
     var $el = $('[data-route="connection"] select[data-name="port"]');
@@ -418,4 +419,28 @@ $('[data-route="axes"] [data-name="btn-dropdown"]').dropdown();
 $('[data-route="axes"] [data-name="active-state"]').text('Not connected');
 $('[data-route="axes"] select[data-name="select-distance"]').val('1');
 
+
+function nextSelectDistance() {
+    const $current = jogDistanceSelect.find('option:selected');
+    var $next = $current.next('option');
+    if ($next.length === 0) {
+        $next = jogDistanceSelect.find('option').first(); // Wrap to the first option
+    }
+    $current.prop('selected', false);
+    $next.prop('selected', true);
+}
+$('button[data-name="next-select-distance"]').on('click', nextSelectDistance);
+
+function prevSelectDistance() {
+    const $current = jogDistanceSelect.find('option:selected');
+    var $prev = $current.prev('option');
+    if ($prev.length === 0) {
+        $prev = jogDistanceSelect.find('option').last(); // Wrap to the last option
+    }
+    $current.prop('selected', false);
+    $prev.prop('selected', true);
+}
+$('button[data-name="prev-select-distance"]').on('click', prevSelectDistance);
+
 });
+
